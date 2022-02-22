@@ -4,9 +4,7 @@ import PropTypes from 'prop-types'
 function Button({children, version, type, isDisabled}) {
     const versionType = "btn-" + version
   return (
-    <button type={type} 
-    disabled={isDisabled} 
-    className={versionType}>
+    <button type={type} disabled={isDisabled} className={versionType}>
         {children}
     </button>
   )
