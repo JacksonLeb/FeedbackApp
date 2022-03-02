@@ -4,42 +4,41 @@ import Button from './shared/Button'
 import RatingSelect from './RatingSelect'
 import {useState} from 'react'
 import {useContext} from 'react'
-import { useEffect } from 'react'
+import {useEffect} from 'react'
 import FeedbackContext from '../context/FeedbackContext'
 
 function FeedbackForm() {
     const [text, setText] = useState('')
-    const [rating, setRating] = useState('')
+    const [rating, setRating] = useState(10)
     const [btnDisabled, setBtnDisabled] = useState(true)
     const [message, setMessage] = useState('')
 
-    const {addFeedback, feedbackEdit} = useContext(FeedbackContext)
+    const { addFeedback, feedbackEdit } = useContext(FeedbackContext)
 
     useEffect(() => {
-        if(feedbackEdit.edit === true) {
-            setBtnDisabled(false)
-            setText(feedbackEdit.item.text)
-            setText(feedbackEdit.item.rating)
+        if (feedbackEdit.edit === true) {
+          setBtnDisabled(false)
+          setText(feedbackEdit.item.text)
+          setRating(feedbackEdit.item.rating)
         }
     }, [feedbackEdit])
     
 
-    const handleTextChange = (e) => {
-        if(text === '') {
-            setBtnDisabled(true)
-            setMessage(null)
+      const handleTextChange = ({ target: { value } }) => { // 👈  get the value
+        if (value === '') {
+          setBtnDisabled(true)
+          setMessage(null)
+          
+      // prettier-ignore
+        } else if (value.trim().length < 10) { // 👈 check for less than 10
+          setMessage('Text must be at least 10 characters')
+          setBtnDisabled(true)
+        } else {
+          setMessage(null)
+          setBtnDisabled(false)
         }
-        else if(text !== '' && text.trim().length <= 10) {
-            setBtnDisabled(true)
-            setMessage("Text must be at least 10 characters")
-        }
-        else {
-            setMessage(null)
-            setBtnDisabled(false)
-        }
-
-        setText(e.target.value)
-    }
+        setText(value)
+      }
 
     const handleSubmit = (e) => {
         e.preventDefault()
